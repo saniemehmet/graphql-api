@@ -3,6 +3,7 @@ import { ApolloServer } from 'apollo-server-express';
 import dotenv from "dotenv";
 import mongoose from 'mongoose';
 import "reflect-metadata";
+import { getSchema } from './schema';
 
 dotenv.config();
 
@@ -15,10 +16,11 @@ mongoose.connect(dbUrl, {
 }).then(() => console.log("connected to mongo")).catch((e) => console.log(e));
 
 async function startApolloServer() {
+    const schema = await getSchema();
     const app = express();
 
     const server = new ApolloServer({
-        resolvers: [],
+        schema,
         introspection: true,
     });
 

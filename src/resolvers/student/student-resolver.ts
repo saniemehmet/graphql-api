@@ -16,7 +16,7 @@ export class StudentResolver {
     }
 
     @Mutation(returns => Student)
-    async registerStudent(@Arg("data") data: StudentInput): Promise<Student> {
+    async createStudent(@Arg("data") data: StudentInput): Promise<Student> {
         const studentData = { ...data, password: bcryptjs.hashSync(data.password, 5) }
         const newStudent = new StudentModel(studentData);
         await newStudent.save();

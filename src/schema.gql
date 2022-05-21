@@ -3,9 +3,30 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Course {
+  _id: ObjectId!
+  credits: Float!
+  description: String!
+  subject: String!
+  title: String!
+  tutor: String!
+}
+
+"""Course data"""
+input CourseInput {
+  credits: Float!
+  description: String!
+  subject: String!
+  title: String!
+  tutor: String!
+}
+
 type Mutation {
+  createCourse(data: CourseInput!): Course!
+  createStudent(data: StudentInput!): Student!
+  deleteCourse(_id: String!): Course!
   deleteStudent(_id: String!): Student!
-  registerStudent(data: StudentInput!): Student!
+  updateCourse(_id: String!, data: UpdateCourseInput!): Course!
   updateStudent(_id: String!, data: UpdateStudentInput!): Student!
 }
 
@@ -13,6 +34,8 @@ type Mutation {
 scalar ObjectId
 
 type Query {
+  course(_id: String!): Course!
+  courses: [Course!]!
   student(_id: String!): Student!
   students: [Student!]!
 }
@@ -32,6 +55,15 @@ input StudentInput {
   facultyNumber: Float!
   name: String!
   password: String!
+}
+
+"""Course data"""
+input UpdateCourseInput {
+  credits: Float
+  description: String
+  subject: String
+  title: String
+  tutor: String
 }
 
 input UpdateStudentInput {

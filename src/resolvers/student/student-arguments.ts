@@ -1,5 +1,7 @@
 import { IsEmail, IsInt, IsPositive, MaxLength, Min, MinLength } from "class-validator";
 import { Field, InputType } from "type-graphql";
+import { Course } from "../../entities/courses-entity";
+import { StudentCourseInput } from "../course/course-arguments";
 
 @InputType({ description: "New student data" })
 export class StudentInput {
@@ -22,6 +24,9 @@ export class StudentInput {
     @IsPositive()
     @Min(1000000000)
     facultyNumber: number;
+
+    @Field(type => [String], { nullable: true})
+    coursesIDs?: string[]
 }
 
 @InputType()
@@ -45,4 +50,7 @@ export class UpdateStudentInput {
     @IsPositive()
     @Min(1000000000)
     facultyNumber?: number;
+    
+    @Field(type => [StudentCourseInput], {nullable: true})
+    courses?: Course[]
 }

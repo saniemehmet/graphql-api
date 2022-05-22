@@ -27,7 +27,7 @@ type Mutation {
   deleteCourse(_id: String!): Course!
   deleteStudent(_id: String!): Student!
   updateCourse(_id: String!, data: UpdateCourseInput!): Course!
-  updateStudent(_id: String!, data: UpdateStudentInput!): Student!
+  updateStudent(_id: String!, coursesIds: [String!], data: UpdateStudentInput!): Student!
 }
 
 """Mongo object id scalar type"""
@@ -42,6 +42,7 @@ type Query {
 
 type Student {
   _id: ObjectId!
+  courses: [Course!]
   email: String!
   facultyNumber: Float!
   lastLogin: Float!
@@ -49,8 +50,18 @@ type Student {
   password: String!
 }
 
+input StudentCourseInput {
+  _id: ObjectId!
+  credits: Float!
+  description: String!
+  subject: String!
+  title: String!
+  tutor: String!
+}
+
 """New student data"""
 input StudentInput {
+  coursesIDs: [String!]
   email: String!
   facultyNumber: Float!
   name: String!
@@ -67,6 +78,7 @@ input UpdateCourseInput {
 }
 
 input UpdateStudentInput {
+  courses: [StudentCourseInput!]
   email: String
   facultyNumber: Float
   name: String

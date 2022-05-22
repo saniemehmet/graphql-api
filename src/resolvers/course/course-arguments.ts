@@ -1,4 +1,5 @@
 import { IsInt, IsPositive, Length, MaxLength, Min } from "class-validator";
+import { ObjectId } from "mongodb";
 import { Field, InputType } from "type-graphql";
 
 @InputType({ description: "Course data" })
@@ -51,4 +52,10 @@ export class UpdateCourseInput {
     @Length(2, 40)
     tutor?: string;
 
+}
+
+@InputType()
+export class StudentCourseInput extends CourseInput {
+    @Field({ nullable: false })
+    _id: ObjectId;
 }

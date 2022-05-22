@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import mongoose from 'mongoose';
 import "reflect-metadata";
 import { getSchema } from './schema';
-
 dotenv.config();
 
 const graphqlPath = process.env.GRAPHQL_PATH || 4000;
@@ -22,6 +21,7 @@ async function startApolloServer() {
     const server = new ApolloServer({
         schema,
         introspection: true,
+        
     });
 
     await server.start();

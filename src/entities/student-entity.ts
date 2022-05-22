@@ -1,6 +1,9 @@
-import { getModelForClass, prop as Prop } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop as Prop, Severity } from "@typegoose/typegoose";
 import { ObjectId } from "mongodb";
 import { Field, ObjectType } from "type-graphql";
+import { Course } from "./courses-entity";
+
+@modelOptions({ options: {allowMixed: Severity.ALLOW}})
 
 @ObjectType()
 export class Student {
@@ -26,6 +29,10 @@ export class Student {
     @Field()
     @Prop({ default: Date.now() })
     lastLogin?: number;
+
+    @Field(type => [Course], {nullable: true})
+    @Prop({default: []})
+    courses?: Course[]
 
 }
 

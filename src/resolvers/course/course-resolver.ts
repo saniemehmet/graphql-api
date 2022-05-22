@@ -1,7 +1,9 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Service } from "typedi";
 import { Course, CourseModel } from "../../entities/courses-entity";
 import { CourseInput, UpdateCourseInput } from "./course-arguments";
 
+@Service()
 @Resolver()
 export class CourseResolver {
     @Query(returns => Course)

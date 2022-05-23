@@ -7,6 +7,7 @@ import { getSchema } from './schema';
 import jwt from "express-jwt";
 import {Context} from "./resolvers/auth/context";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { User } from './entities/user-entity';
 
 dotenv.config();
 
@@ -35,10 +36,11 @@ async function startApolloServer() {
             ApolloServerPluginLandingPageGraphQLPlayground(),
         ],
         context: ({ req }) => {
+            const user = req.user;
             const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress;
             const context: Context = {
                 req,
-                user: req['user'],
+                user,
                 ip,
             }
             return context;

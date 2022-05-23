@@ -23,11 +23,12 @@ input CourseInput {
 
 type Mutation {
   createCourse(data: CourseInput!): Course!
-  createStudent(data: StudentInput!): Student!
+  createUser(data: UserInput!): User!
   deleteCourse(_id: String!): Course!
-  deleteStudent(_id: String!): Student!
+  deleteUser(_id: String!): User!
+  login(email: String!, password: String!): String!
   updateCourse(_id: String!, data: UpdateCourseInput!): Course!
-  updateStudent(_id: String!, coursesIds: [String!], data: UpdateStudentInput!): Student!
+  updateUser(_id: String!, coursesIds: [String!], data: UpdateUserInput!): User!
 }
 
 """Mongo object id scalar type"""
@@ -36,36 +37,9 @@ scalar ObjectId
 type Query {
   course(_id: String!): Course!
   courses: [Course!]!
-  student(_id: String!): Student!
-  students: [Student!]!
-}
-
-type Student {
-  _id: ObjectId!
-  courses: [Course!]
-  email: String!
-  facultyNumber: Float!
-  lastLogin: Float!
-  name: String!
-  password: String!
-}
-
-input StudentCourseInput {
-  _id: ObjectId!
-  credits: Float!
-  description: String!
-  subject: String!
-  title: String!
-  tutor: String!
-}
-
-"""New student data"""
-input StudentInput {
-  coursesIDs: [String!]
-  email: String!
-  facultyNumber: Float!
-  name: String!
-  password: String!
+  currentUser: User!
+  user(_id: String!): User!
+  users: [User!]!
 }
 
 """Course data"""
@@ -77,10 +51,40 @@ input UpdateCourseInput {
   tutor: String
 }
 
-input UpdateStudentInput {
-  courses: [StudentCourseInput!]
+input UpdateUserInput {
+  courses: [UserCourseInput!]
   email: String
   facultyNumber: Float
   name: String
   password: String
+}
+
+type User {
+  _id: ObjectId!
+  courses: [Course!]
+  email: String!
+  facultyNumber: Float
+  lastLogin: Float!
+  name: String!
+  password: String!
+  roles: [String!]!
+}
+
+input UserCourseInput {
+  _id: ObjectId!
+  credits: Float!
+  description: String!
+  subject: String!
+  title: String!
+  tutor: String!
+}
+
+"""New student data"""
+input UserInput {
+  coursesIDs: [String!]
+  email: String!
+  facultyNumber: Float
+  name: String!
+  password: String!
+  roles: [String!]
 }

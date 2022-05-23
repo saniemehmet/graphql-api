@@ -4,11 +4,20 @@ import dotenv from "dotenv";
 import mongoose from 'mongoose';
 import "reflect-metadata";
 import { getSchema } from './schema';
+import jwt from "express-jwt";
+import {Context} from "./resolvers/auth/context";
+
 dotenv.config();
 
 const graphqlPath = process.env.GRAPHQL_PATH || 4000;
 const port = process.env.PORT;
 const dbUrl: string = process.env.MONGODB_URL!;
+
+const auth = jwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ['HS256'],
+    credentialsRequired: false,
+})
 
 mongoose.connect(dbUrl, {
     autoIndex: true,
@@ -21,8 +30,20 @@ async function startApolloServer() {
     const server = new ApolloServer({
         schema,
         introspection: true,
-        
+        context: ({ req }) => {
+            const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress;
+            const context: Context = {
+                req,
+                user: req['user'],
+                ip,
+            }
+            return context;
+        },
     });
+    
+    app.use(
+        auth
+    );
 
     await server.start();
     server.applyMiddleware({ app });

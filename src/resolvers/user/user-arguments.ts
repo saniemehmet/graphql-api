@@ -1,10 +1,10 @@
 import { IsEmail, IsInt, IsPositive, MaxLength, Min, MinLength } from "class-validator";
 import { Field, InputType } from "type-graphql";
 import { Course } from "../../entities/courses-entity";
-import { StudentCourseInput } from "../course/course-arguments";
+import { UserCourseInput } from "../course/course-arguments";
 
 @InputType({ description: "New student data" })
-export class StudentInput {
+export class UserInput {
 
     @Field()
     @MaxLength(50)
@@ -19,38 +19,41 @@ export class StudentInput {
     @MinLength(6)
     password: string;
 
-    @Field()
-    @IsInt()
-    @IsPositive()
-    @Min(1000000000)
-    facultyNumber: number;
-
-    @Field(type => [String], { nullable: true})
-    coursesIDs?: string[]
-}
-
-@InputType()
-export class UpdateStudentInput {
-
-    @Field({ nullable: true})
-    @MaxLength(50)
-    name?: string;
-
-    @Field({ nullable: true})
-    @IsEmail()
-    @MaxLength(30)
-    email?: string;
-
-    @Field({ nullable: true})
-    @MinLength(6)
-    password?: string;
-
-    @Field({ nullable: true})
+    @Field({ nullable: true })
     @IsInt()
     @IsPositive()
     @Min(1000000000)
     facultyNumber?: number;
-    
-    @Field(type => [StudentCourseInput], {nullable: true})
+
+    @Field(type => [String], { nullable: true })
+    coursesIDs?: string[]
+
+    @Field(type => [String], { nullable: true })
+    roles?: string[]
+}
+
+@InputType()
+export class UpdateUserInput {
+
+    @Field({ nullable: true })
+    @MaxLength(50)
+    name?: string;
+
+    @Field({ nullable: true })
+    @IsEmail()
+    @MaxLength(30)
+    email?: string;
+
+    @Field({ nullable: true })
+    @MinLength(6)
+    password?: string;
+
+    @Field({ nullable: true })
+    @IsInt()
+    @IsPositive()
+    @Min(1000000000)
+    facultyNumber?: number;
+
+    @Field(type => [UserCourseInput], { nullable: true })
     courses?: Course[]
 }

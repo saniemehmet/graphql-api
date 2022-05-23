@@ -55,7 +55,7 @@ export class UpdateCourseInput {
 }
 
 @InputType()
-export class StudentCourseInput extends CourseInput {
+export class UserCourseInput extends CourseInput {
     @Field({ nullable: false })
     _id: ObjectId;
 }

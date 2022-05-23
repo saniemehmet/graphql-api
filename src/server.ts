@@ -6,6 +6,7 @@ import "reflect-metadata";
 import { getSchema } from './schema';
 import jwt from "express-jwt";
 import {Context} from "./resolvers/auth/context";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
 dotenv.config();
 
@@ -30,6 +31,9 @@ async function startApolloServer() {
     const server = new ApolloServer({
         schema,
         introspection: true,
+        plugins:[
+            ApolloServerPluginLandingPageGraphQLPlayground(),
+        ],
         context: ({ req }) => {
             const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress;
             const context: Context = {

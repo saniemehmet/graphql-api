@@ -2,13 +2,13 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import dotenv from "dotenv";
 import cors from "cors";
+import http from "http";
 import mongoose from 'mongoose';
 import "reflect-metadata";
 import { getSchema } from './schema';
 import jwt from "express-jwt";
 import { Context } from "./resolvers/auth/context";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { User } from './entities/user-entity';
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import bodyParser from 'body-parser';
 
 dotenv.config();
@@ -30,6 +30,7 @@ mongoose.connect(dbUrl, {
 async function startApolloServer() {
     const schema = await getSchema();
     const app = express();
+    const httpServer = http.createServer(app);
     app.use(
         cors({
             origin: '*'
@@ -42,6 +43,7 @@ async function startApolloServer() {
         schema,
         introspection: true,
         plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageGraphQLPlayground(),
         ],
         context: ({ req }) => {
@@ -59,7 +61,7 @@ async function startApolloServer() {
     await server.start();
     server.applyMiddleware({ app });
 
-    await new Promise(resolve => app.listen({ port }));
+    await new Promise(resolve => httpServer.listen({ port }));
     console.log(`🚀 Server ready at http://localhost:${port}/${graphqlPath}`);
     return { server, app };
 }

@@ -2,10 +2,11 @@
   "name": "graphql-api",
   "version": "1.0.0",
   "description": "GraphQL API project",
-  "main": "src/server.ts",
+  "main": "build/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "start": "ts-node src/server.ts",
+    "start": "node build/server.js",
+    "postinstall": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc"
   },

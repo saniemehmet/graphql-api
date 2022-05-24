@@ -1,13 +1,15 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import dotenv from "dotenv";
+import cors from "cors";
 import mongoose from 'mongoose';
 import "reflect-metadata";
 import { getSchema } from './schema';
 import jwt from "express-jwt";
-import {Context} from "./resolvers/auth/context";
+import { Context } from "./resolvers/auth/context";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { User } from './entities/user-entity';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
@@ -28,12 +30,18 @@ mongoose.connect(dbUrl, {
 async function startApolloServer() {
     const schema = await getSchema();
     const app = express();
+    app.use(
+        cors({
+            origin: '*'
+        }),
+        bodyParser.json(),
+        auth
+    );
 
     const server = new ApolloServer({
         schema,
         introspection: true,
-        playground: true,
-        plugins:[
+        plugins: [
             ApolloServerPluginLandingPageGraphQLPlayground(),
         ],
         context: ({ req }) => {
@@ -47,10 +55,6 @@ async function startApolloServer() {
             return context;
         },
     });
-    
-    app.use(
-        auth
-    );
 
     await server.start();
     server.applyMiddleware({ app });
